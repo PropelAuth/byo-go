@@ -172,7 +172,7 @@ type CreateDeviceChallengeError struct {
 
 
 func (e *CreateDeviceChallengeError) Error() string {
-	return fmt.Sprintf("CreateDeviceChallengeError: %v", e)
+	return fmt.Sprintf("CreateDeviceChallengeError: %+v", *e)
 }
 
 
@@ -591,7 +591,7 @@ type DeregisterAllPasskeysForUserError struct {
 
 
 func (e *DeregisterAllPasskeysForUserError) Error() string {
-	return fmt.Sprintf("DeregisterAllPasskeysForUserError: %v", e)
+	return fmt.Sprintf("DeregisterAllPasskeysForUserError: %+v", *e)
 }
 
 
@@ -688,7 +688,7 @@ type FetchAllImpersonationSessionsForEmployeeError struct {
 
 
 func (e *FetchAllImpersonationSessionsForEmployeeError) Error() string {
-	return fmt.Sprintf("FetchAllImpersonationSessionsForEmployeeError: %v", e)
+	return fmt.Sprintf("FetchAllImpersonationSessionsForEmployeeError: %+v", *e)
 }
 
 
@@ -701,7 +701,7 @@ type FetchAllImpersonationSessionsForUserError struct {
 
 
 func (e *FetchAllImpersonationSessionsForUserError) Error() string {
-	return fmt.Sprintf("FetchAllImpersonationSessionsForUserError: %v", e)
+	return fmt.Sprintf("FetchAllImpersonationSessionsForUserError: %+v", *e)
 }
 
 
@@ -714,7 +714,7 @@ type FetchAllPasskeysForUserError struct {
 
 
 func (e *FetchAllPasskeysForUserError) Error() string {
-	return fmt.Sprintf("FetchAllPasskeysForUserError: %v", e)
+	return fmt.Sprintf("FetchAllPasskeysForUserError: %+v", *e)
 }
 
 
@@ -727,7 +727,7 @@ type FetchAllSessionsError struct {
 
 
 func (e *FetchAllSessionsError) Error() string {
-	return fmt.Sprintf("FetchAllSessionsError: %v", e)
+	return fmt.Sprintf("FetchAllSessionsError: %+v", *e)
 }
 
 
@@ -740,7 +740,7 @@ type FetchAllSessionsForUserError struct {
 
 
 func (e *FetchAllSessionsForUserError) Error() string {
-	return fmt.Sprintf("FetchAllSessionsForUserError: %v", e)
+	return fmt.Sprintf("FetchAllSessionsForUserError: %+v", *e)
 }
 
 
@@ -1079,7 +1079,7 @@ type GetJwksError struct {
 
 
 func (e *GetJwksError) Error() string {
-	return fmt.Sprintf("GetJwksError: %v", e)
+	return fmt.Sprintf("GetJwksError: %+v", *e)
 }
 
 
@@ -1361,7 +1361,7 @@ type InvalidTagError struct {
 
 
 func (e *InvalidTagError) Error() string {
-	return fmt.Sprintf("InvalidTagError: %v", e)
+	return fmt.Sprintf("InvalidTagError: %+v", *e)
 }
 
 
@@ -1374,7 +1374,7 @@ type InvalidateAllImpersonationSessionsForEmployeeError struct {
 
 
 func (e *InvalidateAllImpersonationSessionsForEmployeeError) Error() string {
-	return fmt.Sprintf("InvalidateAllImpersonationSessionsForEmployeeError: %v", e)
+	return fmt.Sprintf("InvalidateAllImpersonationSessionsForEmployeeError: %+v", *e)
 }
 
 
@@ -1387,7 +1387,7 @@ type InvalidateAllImpersonationSessionsForUserError struct {
 
 
 func (e *InvalidateAllImpersonationSessionsForUserError) Error() string {
-	return fmt.Sprintf("InvalidateAllImpersonationSessionsForUserError: %v", e)
+	return fmt.Sprintf("InvalidateAllImpersonationSessionsForUserError: %+v", *e)
 }
 
 
@@ -1400,7 +1400,7 @@ type InvalidateAllSessionsForUserError struct {
 
 
 func (e *InvalidateAllSessionsForUserError) Error() string {
-	return fmt.Sprintf("InvalidateAllSessionsForUserError: %v", e)
+	return fmt.Sprintf("InvalidateAllSessionsForUserError: %+v", *e)
 }
 
 
@@ -1413,7 +1413,7 @@ type InvalidateAllSessionsForUserExceptOneError struct {
 
 
 func (e *InvalidateAllSessionsForUserExceptOneError) Error() string {
-	return fmt.Sprintf("InvalidateAllSessionsForUserExceptOneError: %v", e)
+	return fmt.Sprintf("InvalidateAllSessionsForUserExceptOneError: %+v", *e)
 }
 
 
@@ -1552,7 +1552,7 @@ type InvalidateSessionByTokenError struct {
 
 
 func (e *InvalidateSessionByTokenError) Error() string {
-	return fmt.Sprintf("InvalidateSessionByTokenError: %v", e)
+	return fmt.Sprintf("InvalidateSessionByTokenError: %+v", *e)
 }
 
 
@@ -1764,7 +1764,7 @@ type PingError struct {
 
 
 func (e *PingError) Error() string {
-	return fmt.Sprintf("PingError: %v", e)
+	return fmt.Sprintf("PingError: %+v", *e)
 }
 
 
@@ -1966,7 +1966,7 @@ type ScimClientFacingError struct {
 
 
 func (e *ScimClientFacingError) Error() string {
-	return fmt.Sprintf("ScimClientFacingError: %v", e)
+	return fmt.Sprintf("ScimClientFacingError: %+v", *e)
 }
 
 
