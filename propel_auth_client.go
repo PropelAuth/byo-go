@@ -29,6 +29,7 @@ type PropelAuthClient struct {
 	Scim *ScimClient
 	Impersonation *ImpersonationClient
 	Sso *SsoClient
+	APIKeys *ApiKeyClient
 }
 
 // NewClient creates a new PropelAuth client
@@ -57,6 +58,7 @@ func NewClient(url, integrationKey string, opts ...ClientOption) (*PropelAuthCli
 	c.Scim = newScimClient(c)
 	c.Impersonation = newImpersonationClient(c)
 	c.Sso = newSsoClient(c)
+	c.APIKeys = newApiKeyClient(c)
 
 	return c, nil
 }

@@ -5,6 +5,20 @@ import (
 	"fmt"
 )
 
+// ApiKeyFullMetadataResponse represents a generated type
+type ApiKeyFullMetadataResponse struct {
+	KeyID string `json:"keyId"`
+	DisplayName *string `json:"displayName,omitempty"`
+	CreatedAt int64 `json:"createdAt"`
+	Scopes []string `json:"scopes"`
+	ExpiresAt int64 `json:"expiresAt"`
+	LastActiveAt int64 `json:"lastActiveAt"`
+	Metadata json.RawMessage `json:"metadata"`
+	UserID *string `json:"userId,omitempty"`
+	OwnerID *string `json:"ownerId,omitempty"`
+}
+
+
 // CompleteOidcLoginResponse represents a generated type
 type CompleteOidcLoginResponse struct {
 	ClientID string `json:"clientId"`
@@ -36,6 +50,13 @@ type CompletedScimRequestResponse struct {
 	ResponseData *json.RawMessage `json:"responseData,omitempty"`
 	ResponseHTTPCode int `json:"responseHttpCode"`
 	AffectedUserIds []string `json:"affectedUserIds,omitempty"`
+}
+
+
+// CreateApiKeyResponse represents a generated type
+type CreateApiKeyResponse struct {
+	KeyID string `json:"keyId"`
+	Key string `json:"key"`
 }
 
 
@@ -157,6 +178,31 @@ type FetchOidcClientResponse struct {
 	ScimMatchingDefinition *ScimMatchingDefinition `json:"scimMatchingDefinition,omitempty"`
 }
 
+// UnmarshalJSON implements json.Unmarshaler to decode discriminated-union fields
+// whose static types are interfaces. The alias-shadow pattern lets standard
+// fields decode normally via the embedded *Alias while routing union fields
+// through their dedicated Unmarshal<TypeName> helpers.
+func (r *FetchOidcClientResponse) UnmarshalJSON(data []byte) error {
+	type Alias FetchOidcClientResponse
+	aux := &struct {
+		IdpInfoFromCustomer json.RawMessage `json:"idpInfoFromCustomer"`
+		*Alias
+	}{
+		Alias: (*Alias)(r),
+	}
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+	if len(aux.IdpInfoFromCustomer) > 0 && string(aux.IdpInfoFromCustomer) != "null" {
+		val, err := UnmarshalIdpInfoFromCustomerResponse(aux.IdpInfoFromCustomer)
+		if err != nil {
+			return fmt.Errorf("unmarshal idpInfoFromCustomer: %w", err)
+		}
+		r.IdpInfoFromCustomer = val
+	}
+	return nil
+}
+
 
 // FetchScimConnectionResponse represents a generated type
 type FetchScimConnectionResponse struct {
@@ -175,6 +221,15 @@ type FinishPasskeyAuthenticationResponse struct {
 
 // FinishPasskeyRegistrationResponse represents a generated type
 type FinishPasskeyRegistrationResponse struct {
+}
+
+
+// GetApiKeysResponse represents a generated type
+type GetApiKeysResponse struct {
+	APIKeys []ApiKeyFullMetadataResponse `json:"apiKeys"`
+	PageNumber int `json:"pageNumber"`
+	PageSize int `json:"pageSize"`
+	TotalResults int `json:"totalResults"`
 }
 
 
@@ -325,6 +380,11 @@ type InvalidateSessionByTokenResponse struct {
 }
 
 
+// PatchApiKeyResponse represents a generated type
+type PatchApiKeyResponse struct {
+}
+
+
 // PatchOidcClientResponse represents a generated type
 type PatchOidcClientResponse struct {
 	ClientID string `json:"clientId"`
@@ -352,6 +412,11 @@ type RegisterDeviceResponse struct {
 type ResetScimApiKeyResponse struct {
 	ConnectionID string `json:"connectionId"`
 	ScimAPIKey string `json:"scimApiKey"`
+}
+
+
+// RevokeApiKeyResponse represents a generated type
+type RevokeApiKeyResponse struct {
 }
 
 
@@ -527,6 +592,16 @@ type ValidateAndRefreshSessionResponse struct {
 	Metadata *json.RawMessage `json:"metadata,omitempty"`
 	HasDeviceRegistered bool `json:"hasDeviceRegistered"`
 	NewSessionToken *string `json:"newSessionToken,omitempty"`
+}
+
+
+// ValidateApiKeyResponse represents a generated type
+type ValidateApiKeyResponse struct {
+	KeyID string `json:"keyId"`
+	Metadata json.RawMessage `json:"metadata"`
+	Scopes []string `json:"scopes"`
+	UserID *string `json:"userId,omitempty"`
+	OwnerID *string `json:"ownerId,omitempty"`
 }
 
 

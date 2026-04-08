@@ -978,6 +978,101 @@ func (v *CommandCompleteOIDCLogin) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// CommandCreateAPIKey represents the CreateApiKey variant
+type CommandCreateAPIKey struct {
+	Data CreateApiKeyCommand `json:"data"`
+}
+
+func (r *CommandCreateAPIKey) isCommand() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *CommandCreateAPIKey) MarshalJSON() ([]byte, error) {
+	type Alias CommandCreateAPIKey
+	return json.Marshal(&struct {
+		Command string `json:"command"`
+		*Alias
+	}{
+		Command: "CreateApiKey",
+		Alias: (*Alias)(v),
+	})
+}
+
+// CommandValidateAPIKey represents the ValidateApiKey variant
+type CommandValidateAPIKey struct {
+	Data ValidateApiKeyCommand `json:"data"`
+}
+
+func (r *CommandValidateAPIKey) isCommand() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *CommandValidateAPIKey) MarshalJSON() ([]byte, error) {
+	type Alias CommandValidateAPIKey
+	return json.Marshal(&struct {
+		Command string `json:"command"`
+		*Alias
+	}{
+		Command: "ValidateApiKey",
+		Alias: (*Alias)(v),
+	})
+}
+
+// CommandRevokeAPIKey represents the RevokeApiKey variant
+type CommandRevokeAPIKey struct {
+	Data RevokeApiKeyCommand `json:"data"`
+}
+
+func (r *CommandRevokeAPIKey) isCommand() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *CommandRevokeAPIKey) MarshalJSON() ([]byte, error) {
+	type Alias CommandRevokeAPIKey
+	return json.Marshal(&struct {
+		Command string `json:"command"`
+		*Alias
+	}{
+		Command: "RevokeApiKey",
+		Alias: (*Alias)(v),
+	})
+}
+
+// CommandPatchAPIKey represents the PatchApiKey variant
+type CommandPatchAPIKey struct {
+	Data PatchApiKeyCommand `json:"data"`
+}
+
+func (r *CommandPatchAPIKey) isCommand() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *CommandPatchAPIKey) MarshalJSON() ([]byte, error) {
+	type Alias CommandPatchAPIKey
+	return json.Marshal(&struct {
+		Command string `json:"command"`
+		*Alias
+	}{
+		Command: "PatchApiKey",
+		Alias: (*Alias)(v),
+	})
+}
+
+// CommandGetAPIKeys represents the GetApiKeys variant
+type CommandGetAPIKeys struct {
+	Data GetApiKeysCommand `json:"data"`
+}
+
+func (r *CommandGetAPIKeys) isCommand() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *CommandGetAPIKeys) MarshalJSON() ([]byte, error) {
+	type Alias CommandGetAPIKeys
+	return json.Marshal(&struct {
+		Command string `json:"command"`
+		*Alias
+	}{
+		Command: "GetApiKeys",
+		Alias: (*Alias)(v),
+	})
+}
+
 
 
 // CommitScimUserChangeCommand represents a generated type
@@ -991,6 +1086,18 @@ type CommitScimUserChangeCommand struct {
 type CompleteOidcLoginCommand struct {
 	StateFromCookie *string `json:"stateFromCookie,omitempty"`
 	CallbackPathAndQueryParams string `json:"callbackPathAndQueryParams"`
+}
+
+
+// CreateApiKeyCommand represents a generated type
+type CreateApiKeyCommand struct {
+	Prefix *string `json:"prefix,omitempty"`
+	DisplayName *string `json:"displayName,omitempty"`
+	ExpiresAt *int64 `json:"expiresAt,omitempty"`
+	Metadata JsonValue `json:"metadata,omitempty"`
+	UserID *string `json:"userId,omitempty"`
+	OwnerID *string `json:"ownerId,omitempty"`
+	Scopes []string `json:"scopes,omitempty"`
 }
 
 
@@ -1317,6 +1424,17 @@ type FinishPasskeyRegistrationCommand struct {
 }
 
 
+// GetApiKeysCommand represents a generated type
+type GetApiKeysCommand struct {
+	UserID *string `json:"userId,omitempty"`
+	OwnerID *string `json:"ownerId,omitempty"`
+	PageNumber *int `json:"pageNumber,omitempty"`
+	PageSize *int `json:"pageSize,omitempty"`
+	Prefix *string `json:"prefix,omitempty"`
+	Status *ApiKeyStatus `json:"status,omitempty"`
+}
+
+
 // GetJwksCommand represents a generated type
 type GetJwksCommand struct {
 }
@@ -1527,6 +1645,16 @@ type LinkScimUserCommand struct {
 }
 
 
+// PatchApiKeyCommand represents a generated type
+type PatchApiKeyCommand struct {
+	KeyID string `json:"keyId"`
+	DisplayName *string `json:"displayName,omitempty"`
+	ExpiresAt *int64 `json:"expiresAt,omitempty"`
+	SetToNeverExpire *bool `json:"setToNeverExpire,omitempty"`
+	Metadata JsonValue `json:"metadata,omitempty"`
+}
+
+
 // PatchOidcClientCommand is a discriminated union response type
 type PatchOidcClientCommand interface {
 	isPatchOidcClientCommand()
@@ -1700,6 +1828,12 @@ func (v *ResetScimApiKeyCommandCustomerID) MarshalJSON() ([]byte, error) {
 
 
 
+// RevokeApiKeyCommand represents a generated type
+type RevokeApiKeyCommand struct {
+	KeyID string `json:"keyId"`
+}
+
+
 // RotateStatelessTokenKeyCommand represents a generated type
 type RotateStatelessTokenKeyCommand struct {
 	SecsBeforeNewKeyBecomesDefault int `json:"secsBeforeNewKeyBecomesDefault"`
@@ -1761,6 +1895,12 @@ type ValidateAndRefreshSessionCommand struct {
 	RequiredTags []string `json:"requiredTags,omitempty"`
 	DeviceVerification *DeviceVerification `json:"deviceVerification,omitempty"`
 	IgnoreDeviceForVerification *bool `json:"ignoreDeviceForVerification,omitempty"`
+}
+
+
+// ValidateApiKeyCommand represents a generated type
+type ValidateApiKeyCommand struct {
+	Key string `json:"key"`
 }
 
 

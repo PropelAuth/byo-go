@@ -163,6 +163,78 @@ func newCompleteOidcLoginErrorUnexpectedError(details string) *CompleteOidcLogin
 
 
 
+// CreateApiKeyError is the base error type
+type CreateApiKeyError struct {
+	Type    string
+	message string
+}
+
+func (e *CreateApiKeyError) Error() string {
+	return e.message
+}
+
+// CreateApiKeyErrorInvalidFields represents the InvalidFields error variant
+type CreateApiKeyErrorInvalidFields struct {
+	*CreateApiKeyError
+	Details CreateApiKeyErrorInvalidFieldsDetails
+}
+
+func newCreateApiKeyErrorInvalidFields(details CreateApiKeyErrorInvalidFieldsDetails) *CreateApiKeyErrorInvalidFields {
+	return &CreateApiKeyErrorInvalidFields{
+		CreateApiKeyError: &CreateApiKeyError{
+			Type:    "InvalidFields",
+			message: "InvalidFields",
+		},
+		Details: details,
+	}
+}
+
+// CreateApiKeyErrorPrefixNotFound represents the PrefixNotFound error variant
+type CreateApiKeyErrorPrefixNotFound struct {
+	*CreateApiKeyError
+}
+
+func newCreateApiKeyErrorPrefixNotFound() *CreateApiKeyErrorPrefixNotFound {
+	return &CreateApiKeyErrorPrefixNotFound{
+		CreateApiKeyError: &CreateApiKeyError{
+			Type:    "PrefixNotFound",
+			message: "PrefixNotFound",
+		},
+	}
+}
+
+// CreateApiKeyErrorUserNotFound represents the UserNotFound error variant
+type CreateApiKeyErrorUserNotFound struct {
+	*CreateApiKeyError
+}
+
+func newCreateApiKeyErrorUserNotFound() *CreateApiKeyErrorUserNotFound {
+	return &CreateApiKeyErrorUserNotFound{
+		CreateApiKeyError: &CreateApiKeyError{
+			Type:    "UserNotFound",
+			message: "UserNotFound",
+		},
+	}
+}
+
+// CreateApiKeyErrorUnexpectedError represents the UnexpectedError error variant
+type CreateApiKeyErrorUnexpectedError struct {
+	*CreateApiKeyError
+	Details string
+}
+
+func newCreateApiKeyErrorUnexpectedError(details string) *CreateApiKeyErrorUnexpectedError {
+	return &CreateApiKeyErrorUnexpectedError{
+		CreateApiKeyError: &CreateApiKeyError{
+			Type:    "UnexpectedError",
+			message: "UnexpectedError",
+		},
+		Details: details,
+	}
+}
+
+
+
 // CreateDeviceChallengeError represents a generated type
 type CreateDeviceChallengeError struct {
 	Type string `json:"type"`
@@ -1070,6 +1142,64 @@ func newFinishPasskeyRegistrationErrorUnexpectedError(details string) *FinishPas
 
 
 
+// GetApiKeysError is the base error type
+type GetApiKeysError struct {
+	Type    string
+	message string
+}
+
+func (e *GetApiKeysError) Error() string {
+	return e.message
+}
+
+// GetApiKeysErrorInvalidQueryField represents the InvalidQueryField error variant
+type GetApiKeysErrorInvalidQueryField struct {
+	*GetApiKeysError
+	Details GetApiKeysErrorInvalidQueryFieldDetails
+}
+
+func newGetApiKeysErrorInvalidQueryField(details GetApiKeysErrorInvalidQueryFieldDetails) *GetApiKeysErrorInvalidQueryField {
+	return &GetApiKeysErrorInvalidQueryField{
+		GetApiKeysError: &GetApiKeysError{
+			Type:    "InvalidQueryField",
+			message: "InvalidQueryField",
+		},
+		Details: details,
+	}
+}
+
+// GetApiKeysErrorUserNotFound represents the UserNotFound error variant
+type GetApiKeysErrorUserNotFound struct {
+	*GetApiKeysError
+}
+
+func newGetApiKeysErrorUserNotFound() *GetApiKeysErrorUserNotFound {
+	return &GetApiKeysErrorUserNotFound{
+		GetApiKeysError: &GetApiKeysError{
+			Type:    "UserNotFound",
+			message: "UserNotFound",
+		},
+	}
+}
+
+// GetApiKeysErrorUnexpectedError represents the UnexpectedError error variant
+type GetApiKeysErrorUnexpectedError struct {
+	*GetApiKeysError
+	Details string
+}
+
+func newGetApiKeysErrorUnexpectedError(details string) *GetApiKeysErrorUnexpectedError {
+	return &GetApiKeysErrorUnexpectedError{
+		GetApiKeysError: &GetApiKeysError{
+			Type:    "UnexpectedError",
+			message: "UnexpectedError",
+		},
+		Details: details,
+	}
+}
+
+
+
 // GetJwksError represents a generated type
 type GetJwksError struct {
 	Type string `json:"type"`
@@ -1639,6 +1769,64 @@ const (
 )
 
 
+// PatchApiKeyError is the base error type
+type PatchApiKeyError struct {
+	Type    string
+	message string
+}
+
+func (e *PatchApiKeyError) Error() string {
+	return e.message
+}
+
+// PatchApiKeyErrorInvalidFields represents the InvalidFields error variant
+type PatchApiKeyErrorInvalidFields struct {
+	*PatchApiKeyError
+	Details PatchApiKeyErrorInvalidFieldsDetails
+}
+
+func newPatchApiKeyErrorInvalidFields(details PatchApiKeyErrorInvalidFieldsDetails) *PatchApiKeyErrorInvalidFields {
+	return &PatchApiKeyErrorInvalidFields{
+		PatchApiKeyError: &PatchApiKeyError{
+			Type:    "InvalidFields",
+			message: "InvalidFields",
+		},
+		Details: details,
+	}
+}
+
+// PatchApiKeyErrorLiveAPIKeyNotFound represents the LiveApiKeyNotFound error variant
+type PatchApiKeyErrorLiveAPIKeyNotFound struct {
+	*PatchApiKeyError
+}
+
+func newPatchApiKeyErrorLiveAPIKeyNotFound() *PatchApiKeyErrorLiveAPIKeyNotFound {
+	return &PatchApiKeyErrorLiveAPIKeyNotFound{
+		PatchApiKeyError: &PatchApiKeyError{
+			Type:    "LiveApiKeyNotFound",
+			message: "LiveApiKeyNotFound",
+		},
+	}
+}
+
+// PatchApiKeyErrorUnexpectedError represents the UnexpectedError error variant
+type PatchApiKeyErrorUnexpectedError struct {
+	*PatchApiKeyError
+	Details string
+}
+
+func newPatchApiKeyErrorUnexpectedError(details string) *PatchApiKeyErrorUnexpectedError {
+	return &PatchApiKeyErrorUnexpectedError{
+		PatchApiKeyError: &PatchApiKeyError{
+			Type:    "UnexpectedError",
+			message: "UnexpectedError",
+		},
+		Details: details,
+	}
+}
+
+
+
 // PatchOidcClientError is the base error type
 type PatchOidcClientError struct {
 	Type    string
@@ -1887,6 +2075,48 @@ type ResetScimApiKeyErrorUnexpectedError struct {
 func newResetScimApiKeyErrorUnexpectedError(details string) *ResetScimApiKeyErrorUnexpectedError {
 	return &ResetScimApiKeyErrorUnexpectedError{
 		ResetScimApiKeyError: &ResetScimApiKeyError{
+			Type:    "UnexpectedError",
+			message: "UnexpectedError",
+		},
+		Details: details,
+	}
+}
+
+
+
+// RevokeApiKeyError is the base error type
+type RevokeApiKeyError struct {
+	Type    string
+	message string
+}
+
+func (e *RevokeApiKeyError) Error() string {
+	return e.message
+}
+
+// RevokeApiKeyErrorLiveAPIKeyNotFound represents the LiveApiKeyNotFound error variant
+type RevokeApiKeyErrorLiveAPIKeyNotFound struct {
+	*RevokeApiKeyError
+}
+
+func newRevokeApiKeyErrorLiveAPIKeyNotFound() *RevokeApiKeyErrorLiveAPIKeyNotFound {
+	return &RevokeApiKeyErrorLiveAPIKeyNotFound{
+		RevokeApiKeyError: &RevokeApiKeyError{
+			Type:    "LiveApiKeyNotFound",
+			message: "LiveApiKeyNotFound",
+		},
+	}
+}
+
+// RevokeApiKeyErrorUnexpectedError represents the UnexpectedError error variant
+type RevokeApiKeyErrorUnexpectedError struct {
+	*RevokeApiKeyError
+	Details string
+}
+
+func newRevokeApiKeyErrorUnexpectedError(details string) *RevokeApiKeyErrorUnexpectedError {
+	return &RevokeApiKeyErrorUnexpectedError{
+		RevokeApiKeyError: &RevokeApiKeyError{
 			Type:    "UnexpectedError",
 			message: "UnexpectedError",
 		},
@@ -2584,6 +2814,50 @@ func newValidateAndRefreshSessionErrorUnexpectedError(details string) *ValidateA
 
 
 
+// ValidateApiKeyError is the base error type
+type ValidateApiKeyError struct {
+	Type    string
+	message string
+}
+
+func (e *ValidateApiKeyError) Error() string {
+	return e.message
+}
+
+// ValidateApiKeyErrorInvalidAPIKeyError represents the InvalidApiKeyError error variant
+type ValidateApiKeyErrorInvalidAPIKeyError struct {
+	*ValidateApiKeyError
+	Details string
+}
+
+func newValidateApiKeyErrorInvalidAPIKeyError(details string) *ValidateApiKeyErrorInvalidAPIKeyError {
+	return &ValidateApiKeyErrorInvalidAPIKeyError{
+		ValidateApiKeyError: &ValidateApiKeyError{
+			Type:    "InvalidApiKeyError",
+			message: "InvalidApiKeyError",
+		},
+		Details: details,
+	}
+}
+
+// ValidateApiKeyErrorUnexpectedError represents the UnexpectedError error variant
+type ValidateApiKeyErrorUnexpectedError struct {
+	*ValidateApiKeyError
+	Details string
+}
+
+func newValidateApiKeyErrorUnexpectedError(details string) *ValidateApiKeyErrorUnexpectedError {
+	return &ValidateApiKeyErrorUnexpectedError{
+		ValidateApiKeyError: &ValidateApiKeyError{
+			Type:    "UnexpectedError",
+			message: "UnexpectedError",
+		},
+		Details: details,
+	}
+}
+
+
+
 // ValidateImpersonationSessionError is the base error type
 type ValidateImpersonationSessionError struct {
 	Type    string
@@ -2992,6 +3266,46 @@ func parseCompleteOidcLoginError(data []byte) error {
 	default:
 		// Unknown error type
 		return newCompleteOidcLoginErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
+	}
+}
+
+
+// parseCreateApiKeyError parses error response JSON into the appropriate error variant
+func parseCreateApiKeyError(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return newCreateApiKeyErrorUnexpectedError(fmt.Sprintf("malformed error response: %v", err))
+	}
+
+	var errorType string
+	if err := json.Unmarshal(raw["type"], &errorType); err != nil {
+		return newCreateApiKeyErrorUnexpectedError("missing 'type' field in error response")
+	}
+
+	switch errorType {
+	case "InvalidFields":
+		var details struct {
+			Details CreateApiKeyErrorInvalidFieldsDetails `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newCreateApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse InvalidFields error: %v", err))
+		}
+		return newCreateApiKeyErrorInvalidFields(details.Details)
+	case "PrefixNotFound":
+		return newCreateApiKeyErrorPrefixNotFound()
+	case "UserNotFound":
+		return newCreateApiKeyErrorUserNotFound()
+	case "UnexpectedError":
+		var details struct {
+			Details string `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newCreateApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse UnexpectedError error: %v", err))
+		}
+		return newCreateApiKeyErrorUnexpectedError(details.Details)
+	default:
+		// Unknown error type
+		return newCreateApiKeyErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
 	}
 }
 
@@ -3601,6 +3915,44 @@ func parseFinishPasskeyRegistrationError(data []byte) error {
 }
 
 
+// parseGetApiKeysError parses error response JSON into the appropriate error variant
+func parseGetApiKeysError(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return newGetApiKeysErrorUnexpectedError(fmt.Sprintf("malformed error response: %v", err))
+	}
+
+	var errorType string
+	if err := json.Unmarshal(raw["type"], &errorType); err != nil {
+		return newGetApiKeysErrorUnexpectedError("missing 'type' field in error response")
+	}
+
+	switch errorType {
+	case "InvalidQueryField":
+		var details struct {
+			Details GetApiKeysErrorInvalidQueryFieldDetails `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newGetApiKeysErrorUnexpectedError(fmt.Sprintf("failed to parse InvalidQueryField error: %v", err))
+		}
+		return newGetApiKeysErrorInvalidQueryField(details.Details)
+	case "UserNotFound":
+		return newGetApiKeysErrorUserNotFound()
+	case "UnexpectedError":
+		var details struct {
+			Details string `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newGetApiKeysErrorUnexpectedError(fmt.Sprintf("failed to parse UnexpectedError error: %v", err))
+		}
+		return newGetApiKeysErrorUnexpectedError(details.Details)
+	default:
+		// Unknown error type
+		return newGetApiKeysErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
+	}
+}
+
+
 
 // parseGetJwksError parses error response JSON
 func parseGetJwksError(data []byte) error {
@@ -3956,6 +4308,44 @@ func parseLinkScimUserError(data []byte) error {
 }
 
 
+// parsePatchApiKeyError parses error response JSON into the appropriate error variant
+func parsePatchApiKeyError(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return newPatchApiKeyErrorUnexpectedError(fmt.Sprintf("malformed error response: %v", err))
+	}
+
+	var errorType string
+	if err := json.Unmarshal(raw["type"], &errorType); err != nil {
+		return newPatchApiKeyErrorUnexpectedError("missing 'type' field in error response")
+	}
+
+	switch errorType {
+	case "InvalidFields":
+		var details struct {
+			Details PatchApiKeyErrorInvalidFieldsDetails `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newPatchApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse InvalidFields error: %v", err))
+		}
+		return newPatchApiKeyErrorInvalidFields(details.Details)
+	case "LiveApiKeyNotFound":
+		return newPatchApiKeyErrorLiveAPIKeyNotFound()
+	case "UnexpectedError":
+		var details struct {
+			Details string `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newPatchApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse UnexpectedError error: %v", err))
+		}
+		return newPatchApiKeyErrorUnexpectedError(details.Details)
+	default:
+		// Unknown error type
+		return newPatchApiKeyErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
+	}
+}
+
+
 // parsePatchOidcClientError parses error response JSON into the appropriate error variant
 func parsePatchOidcClientError(data []byte) error {
 	var raw map[string]json.RawMessage
@@ -4111,6 +4501,36 @@ func parseResetScimApiKeyError(data []byte) error {
 	default:
 		// Unknown error type
 		return newResetScimApiKeyErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
+	}
+}
+
+
+// parseRevokeApiKeyError parses error response JSON into the appropriate error variant
+func parseRevokeApiKeyError(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return newRevokeApiKeyErrorUnexpectedError(fmt.Sprintf("malformed error response: %v", err))
+	}
+
+	var errorType string
+	if err := json.Unmarshal(raw["type"], &errorType); err != nil {
+		return newRevokeApiKeyErrorUnexpectedError("missing 'type' field in error response")
+	}
+
+	switch errorType {
+	case "LiveApiKeyNotFound":
+		return newRevokeApiKeyErrorLiveAPIKeyNotFound()
+	case "UnexpectedError":
+		var details struct {
+			Details string `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newRevokeApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse UnexpectedError error: %v", err))
+		}
+		return newRevokeApiKeyErrorUnexpectedError(details.Details)
+	default:
+		// Unknown error type
+		return newRevokeApiKeyErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
 	}
 }
 
@@ -4472,6 +4892,42 @@ func parseValidateAndRefreshSessionError(data []byte) error {
 	default:
 		// Unknown error type
 		return newValidateAndRefreshSessionErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
+	}
+}
+
+
+// parseValidateApiKeyError parses error response JSON into the appropriate error variant
+func parseValidateApiKeyError(data []byte) error {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return newValidateApiKeyErrorUnexpectedError(fmt.Sprintf("malformed error response: %v", err))
+	}
+
+	var errorType string
+	if err := json.Unmarshal(raw["type"], &errorType); err != nil {
+		return newValidateApiKeyErrorUnexpectedError("missing 'type' field in error response")
+	}
+
+	switch errorType {
+	case "InvalidApiKeyError":
+		var details struct {
+			Details string `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newValidateApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse InvalidApiKeyError error: %v", err))
+		}
+		return newValidateApiKeyErrorInvalidAPIKeyError(details.Details)
+	case "UnexpectedError":
+		var details struct {
+			Details string `json:"details"`
+		}
+		if err := json.Unmarshal(data, &details); err != nil {
+			return newValidateApiKeyErrorUnexpectedError(fmt.Sprintf("failed to parse UnexpectedError error: %v", err))
+		}
+		return newValidateApiKeyErrorUnexpectedError(details.Details)
+	default:
+		// Unknown error type
+		return newValidateApiKeyErrorUnexpectedError(fmt.Sprintf("unknown error type '%s': %s", errorType, string(data)))
 	}
 }
 

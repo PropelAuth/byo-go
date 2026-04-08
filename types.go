@@ -2,7 +2,14 @@ package byo
 
 import (
 	"encoding/json"
+	"fmt"
 )
+
+// CreateApiKeyErrorInvalidFieldsDetails represents a generated type
+type CreateApiKeyErrorInvalidFieldsDetails struct {
+	Fields []InvalidField `json:"fields"`
+}
+
 
 // CreateOidcClientErrorInvalidFieldsDetails represents a generated type
 type CreateOidcClientErrorInvalidFieldsDetails struct {
@@ -63,86 +70,18 @@ type FinishPasskeyRegistrationErrorOriginNotAllowedDetails struct {
 }
 
 
-// GetScimUsersErrorInvalidQueryFieldDetails represents a generated type
-type GetScimUsersErrorInvalidQueryFieldDetails struct {
+// GetApiKeysErrorInvalidQueryFieldDetails represents a generated type
+type GetApiKeysErrorInvalidQueryFieldDetails struct {
 	Field string `json:"field"`
 	Message string `json:"message"`
 }
 
 
-// IdpInfoFromCustomer is a discriminated union response type
-type IdpInfoFromCustomer interface {
-	isIdpInfoFromCustomer()
+// GetScimUsersErrorInvalidQueryFieldDetails represents a generated type
+type GetScimUsersErrorInvalidQueryFieldDetails struct {
+	Field string `json:"field"`
+	Message string `json:"message"`
 }
-
-// IdpInfoFromCustomerMicrosoftEntra represents the MicrosoftEntra variant
-type IdpInfoFromCustomerMicrosoftEntra struct {
-	ClientID string `json:"clientId"`
-	ClientSecret string `json:"clientSecret"`
-	UsesPkce bool `json:"usesPkce"`
-	TenantID string `json:"tenantId"`
-}
-
-func (r *IdpInfoFromCustomerMicrosoftEntra) isIdpInfoFromCustomer() {}
-
-// MarshalJSON implements json.Marshaler to include the discriminator field
-func (v *IdpInfoFromCustomerMicrosoftEntra) MarshalJSON() ([]byte, error) {
-	type Alias IdpInfoFromCustomerMicrosoftEntra
-	return json.Marshal(&struct {
-		IdpType string `json:"idpType"`
-		*Alias
-	}{
-		IdpType: "MicrosoftEntra",
-		Alias: (*Alias)(v),
-	})
-}
-
-// IdpInfoFromCustomerOkta represents the Okta variant
-type IdpInfoFromCustomerOkta struct {
-	ClientID string `json:"clientId"`
-	ClientSecret string `json:"clientSecret"`
-	UsesPkce bool `json:"usesPkce"`
-	SsoDomain string `json:"ssoDomain"`
-}
-
-func (r *IdpInfoFromCustomerOkta) isIdpInfoFromCustomer() {}
-
-// MarshalJSON implements json.Marshaler to include the discriminator field
-func (v *IdpInfoFromCustomerOkta) MarshalJSON() ([]byte, error) {
-	type Alias IdpInfoFromCustomerOkta
-	return json.Marshal(&struct {
-		IdpType string `json:"idpType"`
-		*Alias
-	}{
-		IdpType: "Okta",
-		Alias: (*Alias)(v),
-	})
-}
-
-// IdpInfoFromCustomerGeneric represents the Generic variant
-type IdpInfoFromCustomerGeneric struct {
-	ClientID string `json:"clientId"`
-	ClientSecret string `json:"clientSecret"`
-	UsesPkce bool `json:"usesPkce"`
-	AuthURL string `json:"authUrl"`
-	TokenURL string `json:"tokenUrl"`
-	UserinfoURL string `json:"userinfoUrl"`
-}
-
-func (r *IdpInfoFromCustomerGeneric) isIdpInfoFromCustomer() {}
-
-// MarshalJSON implements json.Marshaler to include the discriminator field
-func (v *IdpInfoFromCustomerGeneric) MarshalJSON() ([]byte, error) {
-	type Alias IdpInfoFromCustomerGeneric
-	return json.Marshal(&struct {
-		IdpType string `json:"idpType"`
-		*Alias
-	}{
-		IdpType: "Generic",
-		Alias: (*Alias)(v),
-	})
-}
-
 
 
 // ImpersonationSessionInfo represents a generated type
@@ -185,51 +124,6 @@ type JwkKey struct {
 	N string `json:"n"`
 	E string `json:"e"`
 }
-
-
-// OidcClientIdentifier is a discriminated union response type
-type OidcClientIdentifier interface {
-	isOidcClientIdentifier()
-}
-
-// OidcClientIdentifierOIDCClientID represents the oidcClientId variant
-type OidcClientIdentifierOIDCClientID struct {
-	OIDCClientID string `json:"oidcClientId"`
-}
-
-func (r *OidcClientIdentifierOIDCClientID) isOidcClientIdentifier() {}
-
-// MarshalJSON implements json.Marshaler to include the discriminator field
-func (v *OidcClientIdentifierOIDCClientID) MarshalJSON() ([]byte, error) {
-	type Alias OidcClientIdentifierOIDCClientID
-	return json.Marshal(&struct {
-		FieldPresence string `json:"__fieldPresence"`
-		*Alias
-	}{
-		FieldPresence: "oidcClientId",
-		Alias: (*Alias)(v),
-	})
-}
-
-// OidcClientIdentifierCustomerID represents the customerId variant
-type OidcClientIdentifierCustomerID struct {
-	CustomerID string `json:"customerId"`
-}
-
-func (r *OidcClientIdentifierCustomerID) isOidcClientIdentifier() {}
-
-// MarshalJSON implements json.Marshaler to include the discriminator field
-func (v *OidcClientIdentifierCustomerID) MarshalJSON() ([]byte, error) {
-	type Alias OidcClientIdentifierCustomerID
-	return json.Marshal(&struct {
-		FieldPresence string `json:"__fieldPresence"`
-		*Alias
-	}{
-		FieldPresence: "customerId",
-		Alias: (*Alias)(v),
-	})
-}
-
 
 
 // OptionalIdpInfoFromCustomer is a discriminated union response type
@@ -304,6 +198,44 @@ func (v *OptionalIdpInfoFromCustomerGeneric) MarshalJSON() ([]byte, error) {
 
 
 
+// UnmarshalOptionalIdpInfoFromCustomer unmarshals JSON data into the appropriate OptionalIdpInfoFromCustomer variant
+func UnmarshalOptionalIdpInfoFromCustomer(data []byte) (OptionalIdpInfoFromCustomer, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["idpType"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse idpType discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "MicrosoftEntra":
+		var variant OptionalIdpInfoFromCustomerMicrosoftEntra
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Okta":
+		var variant OptionalIdpInfoFromCustomerOkta
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Generic":
+		var variant OptionalIdpInfoFromCustomerGeneric
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown idpType: %s", discriminator)
+	}
+}
+
+
 // OptionalIdpInfoFromCustomerForEntra represents a generated type
 type OptionalIdpInfoFromCustomerForEntra struct {
 	ClientSecret *string `json:"clientSecret,omitempty"`
@@ -334,6 +266,12 @@ type OptionalIdpInfoFromCustomerForOkta struct {
 type PasskeyInfo struct {
 	DisplayName *string `json:"displayName,omitempty"`
 	CredentialID string `json:"credentialId"`
+}
+
+
+// PatchApiKeyErrorInvalidFieldsDetails represents a generated type
+type PatchApiKeyErrorInvalidFieldsDetails struct {
+	Fields []InvalidField `json:"fields"`
 }
 
 
@@ -453,6 +391,50 @@ func (v *ScimActionHookDeleteUser) MarshalJSON() ([]byte, error) {
 
 
 
+// UnmarshalScimActionHook unmarshals JSON data into the appropriate ScimActionHook variant
+func UnmarshalScimActionHook(data []byte) (ScimActionHook, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["action"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse action discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "LinkUser":
+		var variant ScimActionHookLinkUser
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "DisableUser":
+		var variant ScimActionHookDisableUser
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "EnableUser":
+		var variant ScimActionHookEnableUser
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "DeleteUser":
+		var variant ScimActionHookDeleteUser
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown action: %s", discriminator)
+	}
+}
+
+
 // ScimUnderlyingErrorMissingRequiredFieldDetails represents a generated type
 type ScimUnderlyingErrorMissingRequiredFieldDetails struct {
 	Field string `json:"field"`
@@ -567,6 +549,50 @@ func (v *ScimUsersPageEqualityFilterUserID) MarshalJSON() ([]byte, error) {
 
 
 
+// UnmarshalScimUsersPageEqualityFilter unmarshals JSON data into the appropriate ScimUsersPageEqualityFilter variant
+func UnmarshalScimUsersPageEqualityFilter(data []byte) (ScimUsersPageEqualityFilter, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["__fieldPresence"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse __fieldPresence discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "userName":
+		var variant ScimUsersPageEqualityFilterUserName
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "externalId":
+		var variant ScimUsersPageEqualityFilterExternalID
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "primaryEmail":
+		var variant ScimUsersPageEqualityFilterPrimaryEmail
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "userId":
+		var variant ScimUsersPageEqualityFilterUserID
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown __fieldPresence: %s", discriminator)
+	}
+}
+
+
 // SessionInfo represents a generated type
 type SessionInfo struct {
 	SessionID string `json:"sessionId"`
@@ -629,6 +655,15 @@ type ValidateSessionErrorNewDeviceChallengeRequiredDetails struct {
 
 // JsonValue represents arbitrary JSON values (maps, arrays, primitives, etc.)
 type JsonValue = any
+
+
+// ApiKeyStatus represents an enumeration type
+type ApiKeyStatus string
+
+const (
+	ApiKeyStatusLive ApiKeyStatus = "Live"
+	ApiKeyStatusRevoked ApiKeyStatus = "Revoked"
+)
 
 
 // DeviceType represents an enumeration type
@@ -708,9 +743,237 @@ func (v *IdentityProviderGeneric) MarshalJSON() ([]byte, error) {
 
 
 
+// UnmarshalIdentityProvider unmarshals JSON data into the appropriate IdentityProvider variant
+func UnmarshalIdentityProvider(data []byte) (IdentityProvider, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["idpType"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse idpType discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "MicrosoftEntra":
+		var variant IdentityProviderMicrosoftEntra
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Okta":
+		var variant IdentityProviderOkta
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Generic":
+		var variant IdentityProviderGeneric
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown idpType: %s", discriminator)
+	}
+}
+
+
+// IdpInfoFromCustomer is a discriminated union response type
+type IdpInfoFromCustomer interface {
+	isIdpInfoFromCustomer()
+}
+
+// IdpInfoFromCustomerMicrosoftEntra represents the MicrosoftEntra variant
+type IdpInfoFromCustomerMicrosoftEntra struct {
+	ClientID string `json:"clientId"`
+	ClientSecret string `json:"clientSecret"`
+	UsesPkce bool `json:"usesPkce"`
+	TenantID string `json:"tenantId"`
+}
+
+func (r *IdpInfoFromCustomerMicrosoftEntra) isIdpInfoFromCustomer() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *IdpInfoFromCustomerMicrosoftEntra) MarshalJSON() ([]byte, error) {
+	type Alias IdpInfoFromCustomerMicrosoftEntra
+	return json.Marshal(&struct {
+		IdpType string `json:"idpType"`
+		*Alias
+	}{
+		IdpType: "MicrosoftEntra",
+		Alias: (*Alias)(v),
+	})
+}
+
+// IdpInfoFromCustomerOkta represents the Okta variant
+type IdpInfoFromCustomerOkta struct {
+	ClientID string `json:"clientId"`
+	ClientSecret string `json:"clientSecret"`
+	UsesPkce bool `json:"usesPkce"`
+	SsoDomain string `json:"ssoDomain"`
+}
+
+func (r *IdpInfoFromCustomerOkta) isIdpInfoFromCustomer() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *IdpInfoFromCustomerOkta) MarshalJSON() ([]byte, error) {
+	type Alias IdpInfoFromCustomerOkta
+	return json.Marshal(&struct {
+		IdpType string `json:"idpType"`
+		*Alias
+	}{
+		IdpType: "Okta",
+		Alias: (*Alias)(v),
+	})
+}
+
+// IdpInfoFromCustomerGeneric represents the Generic variant
+type IdpInfoFromCustomerGeneric struct {
+	ClientID string `json:"clientId"`
+	ClientSecret string `json:"clientSecret"`
+	UsesPkce bool `json:"usesPkce"`
+	AuthURL string `json:"authUrl"`
+	TokenURL string `json:"tokenUrl"`
+	UserinfoURL string `json:"userinfoUrl"`
+}
+
+func (r *IdpInfoFromCustomerGeneric) isIdpInfoFromCustomer() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *IdpInfoFromCustomerGeneric) MarshalJSON() ([]byte, error) {
+	type Alias IdpInfoFromCustomerGeneric
+	return json.Marshal(&struct {
+		IdpType string `json:"idpType"`
+		*Alias
+	}{
+		IdpType: "Generic",
+		Alias: (*Alias)(v),
+	})
+}
+
+
+
+// UnmarshalIdpInfoFromCustomer unmarshals JSON data into the appropriate IdpInfoFromCustomer variant
+func UnmarshalIdpInfoFromCustomer(data []byte) (IdpInfoFromCustomer, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["idpType"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse idpType discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "MicrosoftEntra":
+		var variant IdpInfoFromCustomerMicrosoftEntra
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Okta":
+		var variant IdpInfoFromCustomerOkta
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Generic":
+		var variant IdpInfoFromCustomerGeneric
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown idpType: %s", discriminator)
+	}
+}
+
+
 // MappingErrors represents a generated type
 type MappingErrors struct {
 	Errors []PropertyParseError `json:"errors"`
+}
+
+
+// OidcClientIdentifier is a discriminated union response type
+type OidcClientIdentifier interface {
+	isOidcClientIdentifier()
+}
+
+// OidcClientIdentifierOIDCClientID represents the oidcClientId variant
+type OidcClientIdentifierOIDCClientID struct {
+	OIDCClientID string `json:"oidcClientId"`
+}
+
+func (r *OidcClientIdentifierOIDCClientID) isOidcClientIdentifier() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *OidcClientIdentifierOIDCClientID) MarshalJSON() ([]byte, error) {
+	type Alias OidcClientIdentifierOIDCClientID
+	return json.Marshal(&struct {
+		FieldPresence string `json:"__fieldPresence"`
+		*Alias
+	}{
+		FieldPresence: "oidcClientId",
+		Alias: (*Alias)(v),
+	})
+}
+
+// OidcClientIdentifierCustomerID represents the customerId variant
+type OidcClientIdentifierCustomerID struct {
+	CustomerID string `json:"customerId"`
+}
+
+func (r *OidcClientIdentifierCustomerID) isOidcClientIdentifier() {}
+
+// MarshalJSON implements json.Marshaler to include the discriminator field
+func (v *OidcClientIdentifierCustomerID) MarshalJSON() ([]byte, error) {
+	type Alias OidcClientIdentifierCustomerID
+	return json.Marshal(&struct {
+		FieldPresence string `json:"__fieldPresence"`
+		*Alias
+	}{
+		FieldPresence: "customerId",
+		Alias: (*Alias)(v),
+	})
+}
+
+
+
+// UnmarshalOidcClientIdentifier unmarshals JSON data into the appropriate OidcClientIdentifier variant
+func UnmarshalOidcClientIdentifier(data []byte) (OidcClientIdentifier, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["__fieldPresence"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse __fieldPresence discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "oidcClientId":
+		var variant OidcClientIdentifierOIDCClientID
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "customerId":
+		var variant OidcClientIdentifierCustomerID
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown __fieldPresence: %s", discriminator)
+	}
 }
 
 
@@ -867,6 +1130,74 @@ func (v *PropertyTypeList) MarshalJSON() ([]byte, error) {
 
 
 
+// UnmarshalPropertyType unmarshals JSON data into the appropriate PropertyType variant
+func UnmarshalPropertyType(data []byte) (PropertyType, error) {
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, fmt.Errorf("failed to parse JSON: %w", err)
+	}
+
+	// Single discriminator
+	var discriminator string
+	if err := json.Unmarshal(raw["dataType"], &discriminator); err != nil {
+		return nil, fmt.Errorf("parse dataType discriminator: %w", err)
+	}
+
+	switch discriminator {
+	case "String":
+		var variant PropertyTypeString
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Integer":
+		var variant PropertyTypeInteger
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Float":
+		var variant PropertyTypeFloat
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Boolean":
+		var variant PropertyTypeBoolean
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Date":
+		var variant PropertyTypeDate
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "DateTime":
+		var variant PropertyTypeDateTime
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "Enum":
+		var variant PropertyTypeEnum
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	case "List":
+		var variant PropertyTypeList
+		if err := json.Unmarshal(data, &variant); err != nil {
+			return nil, err
+		}
+		return &variant, nil
+	default:
+		return nil, fmt.Errorf("unknown dataType: %s", discriminator)
+	}
+}
+
+
 // ScimMatchingDefinition represents a generated type
 type ScimMatchingDefinition struct {
 	Strategy ScimUserMatchingStrategy `json:"strategy"`
@@ -889,6 +1220,31 @@ type ScimUserMappingFieldDefinition struct {
 	Description *string `json:"description,omitempty"`
 	WarnIfMissing bool `json:"warnIfMissing"`
 	DefaultValue *json.RawMessage `json:"defaultValue,omitempty"`
+}
+
+// UnmarshalJSON implements json.Unmarshaler to decode discriminated-union fields
+// whose static types are interfaces. The alias-shadow pattern lets standard
+// fields decode normally via the embedded *Alias while routing union fields
+// through their dedicated Unmarshal<TypeName> helpers.
+func (r *ScimUserMappingFieldDefinition) UnmarshalJSON(data []byte) error {
+	type Alias ScimUserMappingFieldDefinition
+	aux := &struct {
+		PropertyType json.RawMessage `json:"propertyType"`
+		*Alias
+	}{
+		Alias: (*Alias)(r),
+	}
+	if err := json.Unmarshal(data, aux); err != nil {
+		return err
+	}
+	if len(aux.PropertyType) > 0 && string(aux.PropertyType) != "null" {
+		val, err := UnmarshalPropertyType(aux.PropertyType)
+		if err != nil {
+			return fmt.Errorf("unmarshal propertyType: %w", err)
+		}
+		r.PropertyType = val
+	}
+	return nil
 }
 
 
